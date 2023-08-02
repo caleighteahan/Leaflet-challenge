@@ -26,7 +26,7 @@ d3.json(url).then(function (data) {
       return mag * 3;
     }
 
-    //["#98ee00", "#d4ee00", "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"]
+
     function markerColor (depth) {
         if (depth > 100) {
             return "#ff3300";
@@ -81,19 +81,24 @@ d3.json(url).then(function (data) {
       
   
       div.innerHTML = legendInfo;
+      
+      for (let i = 0; i < limits.length; i++) {
+        let label = limits[i];
+        let color = colors[i];
+        let legendItem = '<i style="background-color:' + color + '"></i> ' + label + '<br>';
+        div.innerHTML += legendItem;
+      }
+
+      //limits.forEach(function(limit, index) {
+       // labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+      //});
   
-      limits.forEach(function(limit, index) {
-        labels.push("<li style=\"background-color: " + colors + "\"></li>");
-      });
-  
-      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-      return div;
+      //div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
     };
   
-    // Adding the legend to the map
-    legend.addTo(myMap);
-  
-     
     
+    legend.addTo(myMap);
+   
     }
 );
