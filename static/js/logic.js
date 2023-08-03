@@ -4,7 +4,6 @@ let myMap = L.map('map', {
 });
 
 
-
 L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
 	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 }).addTo(myMap);
@@ -28,7 +27,7 @@ d3.json(url).then(function (data) {
 
 
     function markerColor (depth) {
-        if (depth > 100) {
+        if (depth >= 100) {
             return "#ff3300";
           } else if (depth > 75) {
             return "#ff9900";
@@ -64,38 +63,24 @@ d3.json(url).then(function (data) {
     legend.onAdd = function() {
       
       let div = L.DomUtil.create("div", "info legend");
-      let limits = ["> 100", "99-75", "74-50", "49-35", "34-11", "11 >"];
+      let limits = [">= 100", "99-75", "74-50", "49-35", "34-12", "11 >"];
       let colors = ["#ff3300", "#ff9900", "#ffcc00", "#66ff33", "#339933", "#3366cc"];
       let labels = [];
       
       let legendInfo = "<h1>Earthquake Depth </h1>" + 
       "<div class=\"labels\">" +
-      "<div class=\">100\">" + limits[0] + "</div>" +
-        "<div class=\"99-75\">" + limits[1] + "</div>" +
-         "<div class=\"74-50\">" + limits[2]+ "</div>" +
-         "<div class=\"49-35\">" + limits[3] + "</div>" +
-         "<div class=\"34-11\">" + limits[4] + "</div>" +
-         "<div class=\"11>\">" + limits[5] + "</div>"
       "</div>";
+      div.innerHTML = legendInfo
   
-      
+      limits.forEach(function(limit, index){
+        labels.push("<div class = 'row'><li style=\"background-color: " + colors[index] +  "; width: 75px"+ "; height: 25px" + "\"></li>" + "<li>" + limit + "</li></div>");
+        })
   
-      div.innerHTML = legendInfo;
-      
-      for (let i = 0; i < limits.length; i++) {
-        let label = limits[i];
-        let color = colors[i];
-        let legendItem = '<i style="background-color:' + color + '"></i> ' + label + '<br>';
-        div.innerHTML += legendItem;
-      }
-
-      //limits.forEach(function(limit, index) {
-       // labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
-      //});
+        div.innerHTML += "<ul>" + labels.join("") +"</ul>";
+        return div
   
-      //div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-    return div;
-    };
+    
+     };
   
     
     legend.addTo(myMap);
